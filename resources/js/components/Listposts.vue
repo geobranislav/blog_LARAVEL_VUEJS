@@ -20,6 +20,7 @@
                     <th>User id</th>
                     <th class="col-md-2">Actions</th>
                 </tr>
+
             </thead>
             <tbody>
                 <tr v-for="(post, index) in filteredPosts">
