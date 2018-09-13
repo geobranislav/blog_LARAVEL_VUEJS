@@ -50160,6 +50160,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -50169,7 +50173,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     data: function data() {
         return {
             posts: {},
-            userID: null
+            userID: null,
+            log: false
         };
     },
     methods: {
@@ -50196,6 +50201,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         });*/
         this.fetchIt();
         this.userID = localStorage.getItem('userId');
+        if (localStorage.getItem('token') === null) {
+            this.log = true;
+        }
     }
 });
 
@@ -50211,7 +50219,9 @@ var render = function() {
     "div",
     { staticClass: "row" },
     [
-      _c("app-Header"),
+      _vm.log ? _c("app-Header") : _vm._e(),
+      _vm._v(" "),
+      _c("div", { staticClass: "btn btn-info btn-xs" }, [_vm._v("logout")]),
       _vm._v(" "),
       _c(
         "div",
@@ -50317,7 +50327,11 @@ var render = function() {
             ])
           })
         )
-      ])
+      ]),
+      _vm._v(" "),
+      _vm.log
+        ? _c("div", [_c("h1", [_vm._v("morate se ulogovati!!!")])])
+        : _vm._e()
     ],
     1
   )

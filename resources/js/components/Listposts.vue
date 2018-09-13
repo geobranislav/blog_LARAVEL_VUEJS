@@ -1,6 +1,7 @@
 <template id="post-list">
     <div class="row">
-        <app-Header></app-Header>
+        <app-Header v-if="log"></app-Header>
+        <div class="btn btn-info btn-xs">logout</div>
         <div class="pull-right">
             <router-link class="btn btn-xs btn-primary" v-bind:to="{path: '/add-post'}">
                 <span class="glyphicon glyphicon-plus"></span>
@@ -37,6 +38,9 @@
                 </tr>
             </tbody>
         </table>
+        <div v-if="log">
+            <h1>morate se ulogovati!!!</h1>
+        </div>
     </div>
 </template>
 
@@ -49,7 +53,8 @@
         data:function(){
             return {
                 posts: {},
-                userID: null
+                userID: null,
+                log: false
             };
         },
         methods: {
@@ -74,6 +79,9 @@
             });*/
             this.fetchIt();
             this.userID = localStorage.getItem('userId');
+            if(localStorage.getItem('token') === null) {
+                this.log = true;
+            }
         }
     }
 </script>
