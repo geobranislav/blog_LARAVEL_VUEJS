@@ -26,7 +26,7 @@
                         let token= response.data.token;
                         if(token){
                             localStorage.setItem('token',token);
-                            localStorage.setItem('userId',response.data.userId);
+                            //localStorage.setItem('userId',response.data.userId);
                             this.$router.push({ name: 'Listposts'})
                         }
                     })

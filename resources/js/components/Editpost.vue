@@ -7,7 +7,7 @@
                 <input id="edit-title" v-model="post.title" class="form-control" required />
             </div>
             <div class="form-group">
-                <label for="edit-body">Body</label>
+                <label>Body</label>
                 <textarea class="form-control" rows="10" v-model="post.body"></textarea>
             </div>
             <button type="submit" class="btn btn-xs btn-primary">Create Post</button>

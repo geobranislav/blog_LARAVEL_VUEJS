@@ -11,9 +11,9 @@
 |
 */
 
-Route::get('/', function () {
+/*Route::get('/', function () {
     return view('welcome');
-});
+});*/
 
 //Auth::routes();
 
@@ -26,3 +26,5 @@ Route::middleware('jwt')->resource('/posts','PostController');
 Route::post('/register','UserController@register');
 
 Route::post('/login','UserController@login');
+
+Route::middleware('jwt')->post('/like','PostUserController@liked');

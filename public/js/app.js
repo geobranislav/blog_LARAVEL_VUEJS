@@ -50165,6 +50165,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -50174,7 +50180,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     data: function data() {
         return {
             posts: {},
-            userID: null,
+            //userID: null,
             log: false
         };
     },
@@ -50185,6 +50191,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.loading = true;
             axios({ method: 'get', url: 'posts', headers: { Authorization: "Bearer " + localStorage.getItem('token') } }).then(function (response) {
                 _this.posts = response.data;
+                console.log(response.data);
+            });
+        },
+        likeIt: function likeIt(postID) {
+            var _this2 = this;
+
+            axios({ method: 'POST', url: 'like', headers: { Authorization: "Bearer " + localStorage.getItem('token') }, data: { 'postId': postID } }).then(function (response) {
+                _this2.like = { 'post': response.data[0].post_id, 'count': response.data.length };
+                console.log(response.data);
+                document.getElementById(response.data[0].post_id).innerHTML = response.data.length;
             });
         }
     },
@@ -50196,10 +50212,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
     created: function created() {
-        /*let uri = '/posts/';
-        Axios.get(uri).then((response) => {
-            this.posts = response.data;
-        });*/
         this.fetchIt();
         this.userID = localStorage.getItem('userId');
         if (localStorage.getItem('token') === null) {
@@ -50255,15 +50267,37 @@ var render = function() {
             return _c("tr", [
               _c("td", [_vm._v(_vm._s(index + 1))]),
               _vm._v(" "),
+              _c("td", [_vm._v(_vm._s(post.user_name))]),
+              _vm._v(" "),
               _c("td", [_vm._v(_vm._s(post.title))]),
               _vm._v(" "),
               _c("td", [_vm._v(_vm._s(post.body))]),
               _vm._v(" "),
+              _c("td", [
+                _c(
+                  "form",
+                  {
+                    attrs: { id: post.id },
+                    on: {
+                      submit: function($event) {
+                        $event.preventDefault()
+                        _vm.likeIt(post.id)
+                      }
+                    }
+                  },
+                  [
+                    _c("p", { attrs: { id: post.id } }, [
+                      _vm._v(_vm._s(post.likes))
+                    ]),
+                    _vm._v(" "),
+                    _vm._m(1, true)
+                  ]
+                )
+              ]),
+              _vm._v(" "),
               _c("td", [_vm._v(_vm._s(post.created_at))]),
               _vm._v(" "),
               _c("td", [_vm._v(_vm._s(post.updated_at))]),
-              _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(post.user_id))]),
               _vm._v(" "),
               _c(
                 "td",
@@ -50285,7 +50319,7 @@ var render = function() {
                     ]
                   ),
                   _vm._v(" "),
-                  post.user_id == _vm.userID
+                  post.action == true
                     ? _c(
                         "router-link",
                         {
@@ -50304,7 +50338,7 @@ var render = function() {
                       )
                     : _vm._e(),
                   _vm._v(" "),
-                  post.user_id == _vm.userID
+                  post.action == true
                     ? _c(
                         "router-link",
                         {
@@ -50346,19 +50380,31 @@ var staticRenderFns = [
       _c("tr", [
         _c("th", [_vm._v("#")]),
         _vm._v(" "),
+        _c("th", [_vm._v("USER")]),
+        _vm._v(" "),
         _c("th", [_vm._v("Post Title")]),
         _vm._v(" "),
         _c("th", [_vm._v("Post Body")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Like")]),
         _vm._v(" "),
         _c("th", [_vm._v("Created At")]),
         _vm._v(" "),
         _c("th", [_vm._v("Updated At")]),
         _vm._v(" "),
-        _c("th", [_vm._v("User id")]),
-        _vm._v(" "),
         _c("th", { staticClass: "col-md-2" }, [_vm._v("Actions")])
       ])
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      { staticClass: "btn btn-info btn-xs", attrs: { type: "submit" } },
+      [_c("i", { staticClass: "fa fa-thumbs-o-up" }), _vm._v(" like")]
+    )
   }
 ]
 render._withStripped = true
@@ -50731,7 +50777,7 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "edit-body" } }, [_vm._v("Body")]),
+          _c("label", [_vm._v("Body")]),
           _vm._v(" "),
           _c("textarea", {
             directives: [
@@ -51139,7 +51185,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 var token = response.data.token;
                 if (token) {
                     localStorage.setItem('token', token);
-                    localStorage.setItem('userId', response.data.userId);
+                    //localStorage.setItem('userId',response.data.userId);
                     _this.$router.push({ name: 'Listposts' });
                 }
             });

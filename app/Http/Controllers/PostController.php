@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\PostUser;
 use Illuminate\Http\Request;
 use App\Post;
 use Illuminate\Support\Facades\Auth;
@@ -26,7 +27,30 @@ class PostController extends Controller
 
     public function index()
     {
-     return Post::orderBy('id','DESC')->get();
+     $post = Post::orderBy('id','DESC')->get();
+     //$countLike = PostUser::getLikedPostUser($post->id);
+      //\Log::info($countLike);
+      $objLikes = new PostUser();
+
+      foreach ($post as $value)
+      {
+        //\Log::info($value->user()->first()->name);
+        $countLikes = $objLikes->getLikedPostUser($value->id)->count();
+        //\Log::info($countLikes);
+        $value -> likes = $countLikes;
+
+        $value -> user_name = $value->user()->first()->name;
+        if($value->user_id == Auth::user()->id){
+          $value->action = true;
+          $value->user_name = 'you';
+        } else {
+          $value -> action = false;
+        }
+
+      }
+      //\Log::info($post);
+
+      return $post;
     }
 
     /**
@@ -146,11 +170,17 @@ class PostController extends Controller
     public function destroy($id)
     {
       $post = Post::find($id);
-      if($post->count()){
-        $post->delete();
-        return response()->json(['status'=>'success','msg'=>'Post deleted successfully']);
+      //\Log::info(Auth::user()->id);
+      if($post->user_id == Auth::user()->id)
+      {
+        if($post->count()){
+          $post->delete();
+          return response()->json(['status'=>'success','msg'=>'Post deleted successfully']);
+        } else {
+          return response()->json(['status'=>'error','msg'=>'error in deleting post']);
+        }
       } else {
-        return response()->json(['status'=>'error','msg'=>'error in deleting post']);
+        return response()->json(['status'=>'error','msg'=>'you can not delete this post!!']);
       }
     }
 }
